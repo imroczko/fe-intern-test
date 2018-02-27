@@ -6,8 +6,44 @@
 </head>
 <body>
 
-Good luck!
+<h1>Welcome to photo gallery</h1>
+<div class="gallery">
+    <img id="first" src="" alt="" />
+    <img id="second" src="" alt="" />
+</div>
 
 <script src="app.js"></script>
+<script>
+    var gallery = document.querySelector("div");
+    var yourUrl = "https://codewise-fe-api.herokuapp.com/photos";
+    function Get(yourUrl){
+        var Httpreq = new XMLHttpRequest(); 
+        Httpreq.open("GET",yourUrl,false);
+        Httpreq.send(null);
+        return Httpreq.responseText;          
+    }
+    var json_obj = JSON.parse(Get(yourUrl));
+    var url0 = json_obj[0].url + "?fit=crop&w=640&h=480";
+    var url1 = json_obj[1].url + "?fit=crop&w=640&h=480";
+    document.getElementById("first").setAttribute("src", url0);
+    document.getElementById("second").setAttribute("src", url1);
+    var n = 2;
+
+    $(window).endlessScroll({
+		inflowPixels: 300,
+		callback: function() {
+			loadImage(n);
+		}
+	});
+
+    function loadImage(n) {
+        var newImage = document.createElement("img");
+        var nUrl = json_obj[n].url + "?fit=crop&w=640&h=480";
+        newImage.setAttribute("src", nUrl);
+        gallery.appendChild(newImage);
+        n++;
+    }
+
+</script>
 </body>
 </html>
